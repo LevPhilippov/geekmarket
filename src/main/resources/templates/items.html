@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Items</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Welcome to the Store!</h1>
+        <!--    Блок выбора количества элементов на странице и сортировки -->
+            <div>
+                <form th:action="@{'/items'}" method="get" class="form-inline">
+                    <span>Параметры фильтра:&nbsp;&nbsp;</span>
+                    <input th:name="minPrice" type="number" th:value="${minPrice}" placeholder="Минимальная цена" class="form-control">
+                    <input th:name="maxPrice" type="number" th:value="${maxPrice}" placeholder="Максимальная цена" class="form-control">
+                    <select class="form-control" th:name="itemsNumber" size="1">
+                        <option th:value="5">5</option>
+                        <option selected th:value="10">10</option>
+                        <option th:value="15">15</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Фильтровать</button>
+                    <a class="btn btn-danger" th:href="@{/items}">Сброс фильтра</a>
+                </form>
+            </div>
+            <!--    Блок выбора количества элементов на странице и сортировки -->
+            <!--    Блок демонстрации результата-->
+            <div th:if="${pageItems.getContent().size()>0}">
+                <h2 >Items:</h2>
+                <table class="table table-hover" >
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Название</th>
+                            <th>Price</th>
+                            <th/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${pageItems.getContent()}">
+                            <td th:text="${item.id}"/>
+                            <td th:text="${item.title}"/>
+                            <td th:text="${item.price}"/>
+                            <td>
+                                <a th:href="@{/items(editableItemId=${item.id}, minPrice=${minPrice}, maxPrice=${maxPrice}, pageNumber=${pageItems.getNumber()}, itemsNumber=${pageItems.getSize()})}" class="btn btn-primary">Edit</a>
+<!--                                <a th:href="@{'/items?editableItemId=' + ${item.id} + ${filters} + '&pageNumber=' + ${pageItems.getNumber()} + '&itemsNumber=' + ${pageItems.getSize()} }" class="btn btn-primary">Edit</a>-->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--    Блок демонстрации результата-->
+
+            <!--    Навигация-->
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${pageItems.getNumber() + 1 == 1 ? 'disabled' : ''}">
+                        <a class="page-link" th:href="@{/items(minPrice=${minPrice}, maxPrice=${maxPrice}, itemsNumber=${itemsNumber}, pageNumber = ${pageItems.getNumber()-1})}" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item" th:classappend="(${pageItems.getNumber() + 1 == i? 'active' : ''})" th:each="i: ${#numbers.sequence(1,pageItems.getTotalPages(),1)}">
+                        <a th:text="${i}" class="page-link" th:href="@{/items(minPrice=${minPrice}, maxPrice=${maxPrice}, itemsNumber=${itemsNumber}, pageNumber = ${i-1})}">2<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="page-item" th:classappend="(${pageItems.getNumber() + 1 == pageItems.getTotalPages() ? 'disabled' : ''})">
+                        <a class="page-link" th:href="@{/items(minPrice=${minPrice}, maxPrice=${maxPrice}, itemsNumber=${itemsNumber}, pageNumber = ${pageItems.getNumber()+1})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+            <!--    Навигация-->
+
+            <div>
+                <a th:href="@{/items(addNewItem=${true}, minPrice=${minPrice}, maxPrice=${maxPrice}, pageNumber=${pageItems.getNumber()}, itemsNumber=${pageItems.getSize()})}" class="btn btn-primary">Add new item</a>
+            </div>
+
+            <!--    Форма для изменения элемента-->
+            <div th:if="${editableItem!=null}">
+                <form th:action="@{/saveItem}" th:object="${editableItem}" method="post">
+
+<!--                    <input hidden th:type="text" th:name="filters" th:value="${filters}">-->
+<!--                    <input hidden th:type="number" th:name="itemsNumber" th:value="${itemsNumber}">-->
+<!--                    <input hidden th:type="number" th:name="minPrice" th:value="${minPrice}">-->
+<!--                    <input hidden th:type="number" th:name="maxPrice" th:value="${maxPrice}">-->
+
+                    <input hidden th:type="number" th:name="id" th:value="${editableItem.id != null ? editableItem.id : null}">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputTitle">Наименование товара</label>
+                            <input id="inputTitle"  type="text" th:field="*{title}" class="form-control" placeholder="Введите название продукта"/>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="inputPrice">Стоимость товара</label>
+                            <input id="inputPrice"  type="number" th:field="*{price}" class="form-control" placeholder="Введите цену за единицу"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary col-md-12">Post</button>
+                </form>
+            </div>
+            <!--    Форма для изменения элемента-->
+        </div>
+
+    </body>
+</html>

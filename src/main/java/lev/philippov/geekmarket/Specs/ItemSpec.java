@@ -1,0 +1,16 @@
+package lev.philippov.geekmarket.Specs;
+
+import lev.philippov.geekmarket.Model.Item;
+import org.springframework.data.jpa.domain.Specification;
+
+public class ItemSpec {
+
+    public static Specification<Item> byPriceGreaterThan(Integer minPrice) {
+        return (Specification<Item>) (root, query, criteriaBuilder) -> criteriaBuilder.greaterThan(root.get("price"), minPrice);
+    }
+
+    public static Specification<Item> byPriceLesserThan(Integer maxPrice) {
+        return (Specification<Item>) (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("price"), maxPrice);
+    }
+
+}
