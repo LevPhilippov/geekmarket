@@ -5,11 +5,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class ItemSpec {
 
-    public static Specification<Item> byPriceGreaterThan(Integer minPrice) {
+    public static Specification<Item> byPriceGreaterThan(Double minPrice) {
         return (Specification<Item>) (root, query, criteriaBuilder) -> criteriaBuilder.greaterThan(root.get("price"), minPrice);
     }
 
-    public static Specification<Item> byPriceLesserThan(Integer maxPrice) {
+    public static Specification<Item> byPriceLesserThan(Double maxPrice) {
         return (Specification<Item>) (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("price"), maxPrice);
     }
 

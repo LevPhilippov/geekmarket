@@ -15,8 +15,8 @@
             <div>
                 <form th:action="@{'/items'}" method="get" class="form-inline">
                     <span>Параметры фильтра:&nbsp;&nbsp;</span>
-                    <input th:name="minPrice" type="number" th:value="${minPrice}" placeholder="Минимальная цена" class="form-control">
-                    <input th:name="maxPrice" type="number" th:value="${maxPrice}" placeholder="Максимальная цена" class="form-control">
+                    <input th:name="minPrice" type="number" th:value="${param.minPrice} " placeholder="Минимальная цена" class="form-control">
+                    <input th:name="maxPrice" type="number" th:value="${param.maxPrice}" placeholder="Максимальная цена" class="form-control">
                     <select class="form-control" th:name="itemsNumber" size="1">
                         <option th:value="5">5</option>
                         <option selected th:value="10">10</option>
@@ -45,8 +45,8 @@
                             <td th:text="${item.title}"/>
                             <td th:text="${item.price}"/>
                             <td>
-                                <a th:href="@{/items(editableItemId=${item.id}, minPrice=${minPrice}, maxPrice=${maxPrice}, pageNumber=${pageItems.getNumber()}, itemsNumber=${pageItems.getSize()})}" class="btn btn-primary">Edit</a>
-<!--                                <a th:href="@{'/items?editableItemId=' + ${item.id} + ${filters} + '&pageNumber=' + ${pageItems.getNumber()} + '&itemsNumber=' + ${pageItems.getSize()} }" class="btn btn-primary">Edit</a>-->
+<!--                                <a th:href="@{/items(editableItemId=${item.id}, minPrice=${param.minPrice}, maxPrice=${param.MaxPrice}, pageNumber=${pageItems.getNumber()}, itemsNumber=${pageItems.getSize()})}" class="btn btn-primary">Edit</a>-->
+                                <a th:href="@{'/items?editableItemId=' + ${item.id} + '&pageNumber='+ ${pageItems.getNumber()} + '&itemsNumber=' + ${pageItems.getSize()} + ${filters}}" class="btn btn-success">Edit</a>
                             </td>
                         </tr>
                     </tbody>
@@ -58,28 +58,30 @@
             <nav aria-label="...">
                 <ul class="pagination">
                     <li class="page-item" th:classappend="${pageItems.getNumber() + 1 == 1 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{/items(minPrice=${minPrice}, maxPrice=${maxPrice}, itemsNumber=${itemsNumber}, pageNumber = ${pageItems.getNumber()-1})}" tabindex="-1">Previous</a>
+                        <a class="page-link" th:href="@{'/items?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${pageItems.getNumber()-1} + ${filters}}" tabindex="-1">Previous</a>
                     </li>
                     <li class="page-item" th:classappend="(${pageItems.getNumber() + 1 == i? 'active' : ''})" th:each="i: ${#numbers.sequence(1,pageItems.getTotalPages(),1)}">
-                        <a th:text="${i}" class="page-link" th:href="@{/items(minPrice=${minPrice}, maxPrice=${maxPrice}, itemsNumber=${itemsNumber}, pageNumber = ${i-1})}">2<span class="sr-only">(current)</span></a>
+                        <a th:text="${i}" class="page-link" th:href="@{'/items?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${i-1} + ${filters}}">2<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="page-item" th:classappend="(${pageItems.getNumber() + 1 == pageItems.getTotalPages() ? 'disabled' : ''})">
-                        <a class="page-link" th:href="@{/items(minPrice=${minPrice}, maxPrice=${maxPrice}, itemsNumber=${itemsNumber}, pageNumber = ${pageItems.getNumber()+1})}">Next</a>
+                        <a class="page-link" th:href="@{'/items?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${pageItems.getNumber()+1} + ${filters}}">Next</a>
                     </li>
                 </ul>
             </nav>
             <!--    Навигация-->
-
+<!--Добавление нового элемента-->
             <div>
-                <a th:href="@{/items(addNewItem=${true}, minPrice=${minPrice}, maxPrice=${maxPrice}, pageNumber=${pageItems.getNumber()}, itemsNumber=${pageItems.getSize()})}" class="btn btn-primary">Add new item</a>
+                <a th:href="@{/items(editableItemId=0, minPrice=${minPrice}, maxPrice=${maxPrice}, pageNumber=${pageItems.getNumber()}, itemsNumber=${pageItems.getSize()})}" class="btn btn-primary">Add new item</a>
             </div>
+            <!--Добавление нового элемента-->
 
             <!--    Форма для изменения элемента-->
             <div th:if="${editableItem!=null}">
-                <form th:action="@{/saveItem}" th:object="${editableItem}" method="post">
+                <span th:text="${editableItem.id>0?'Редактирование элемента':'Добавление нового элемента'}">Твою мать!</span>
+                <form th:action="@{/items}" th:object="${editableItem}" method="post">
 
 <!--                    <input hidden th:type="text" th:name="filters" th:value="${filters}">-->
-<!--                    <input hidden th:type="number" th:name="itemsNumber" th:value="${itemsNumber}">-->
+<!--                    <input hidden th:type="number" th:name="itemsNumber" th:value="${pageItems.getSize()}">-->
 <!--                    <input hidden th:type="number" th:name="minPrice" th:value="${minPrice}">-->
 <!--                    <input hidden th:type="number" th:name="maxPrice" th:value="${maxPrice}">-->
 
