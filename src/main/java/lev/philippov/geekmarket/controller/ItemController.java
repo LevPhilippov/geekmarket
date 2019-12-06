@@ -24,7 +24,6 @@ public class ItemController {
     public static final Integer PAGE_NUMBER_DEF = 0;
     public static final Integer ITEMS_NUMBER_DEF = 10;
 
-
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
@@ -55,10 +54,8 @@ public class ItemController {
             }
             model.addAttribute("editableItem", editableItem);
         }
-//        model.addAttribute("paramsMap",paramsMap);
         model.addAttribute("pageItems", pageItems);
         model.addAttribute("filters", filters);
-//        model.addAttribute("filters", sb.toString());
         return "items";
     }
 
