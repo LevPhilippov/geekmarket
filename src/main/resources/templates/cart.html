@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org ">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Items</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Welcome to the Store!</h1>
+            <div th:replace="navigation :: navigation('Cart')"></div>
+            <!--    Блок демонстрации результата-->
+            <div th:if="${!cartItemsMap.isEmpty()}">
+                <h2 >Cart:</h2>
+                <table class="table table-hover" >
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Название</th>
+                            <th>Price</th>
+                            <th>Количество</th>
+                            <th/>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="cartItem: ${cartItemsMap.values()}">
+                            <td th:text="${cartItem.getItem().getTitle()}"/>
+                            <td th:text="${cartItem.getItem().getPrice()}"/>
+                            <td th:text="${cartItem.getQuantity()}"/>
+                            <td>
+                                <a th:href="@{'/cart/delete?id=' + ${cartItem.getItem().getId()}}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+<!--            <div th:if="${items.size()>0}">-->
+<!--                <h2 >Items:</h2>-->
+<!--                <table class="table table-hover" >-->
+<!--                    <thead class="thead-dark">-->
+<!--                        <tr>-->
+<!--                            <th>Название</th>-->
+<!--                            <th>Price</th>-->
+<!--                            <th/>-->
+<!--                        </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                        <tr th:each="item : ${items}">-->
+<!--                            <td th:text="${item.title}"/>-->
+<!--                            <td th:text="${item.price}"/>-->
+<!--                            <td>-->
+<!--                                <a th:href="@{}" class="btn btn-danger">Delete</a>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+            <!--    Блок демонстрации результата-->
+        </div>
+    </body>
+</html>

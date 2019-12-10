@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org ">
     <head>
         <meta charset="utf-8"/>
         <title>Items</title>
@@ -11,6 +11,7 @@
     <body>
         <div class="container">
             <h1>Welcome to the Store!</h1>
+            <div th:replace="navigation :: navigation(activeTab)"></div>
         <!--    Блок выбора количества элементов на странице и сортировки -->
             <div>
                 <form th:action="@{'/items'}" method="get" class="form-inline">
