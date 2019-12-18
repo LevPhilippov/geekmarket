@@ -1,9 +1,15 @@
 package lev.philippov.geekmarket.Model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "items")
+@Data
+@NoArgsConstructor
 public class Item {
 
     @Id
@@ -15,41 +21,6 @@ public class Item {
     private String title;
 
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
-    public Item() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", price=" + price +
-                '}';
-    }
 }

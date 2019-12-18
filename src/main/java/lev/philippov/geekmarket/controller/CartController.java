@@ -29,7 +29,7 @@ public class CartController {
         model.addAttribute("cartItemsMap", cart.getCartItemsMap());
 //
 //        iter
-        model.addAttribute("items",cart.getItems());
+//        model.addAttribute("items",cart.getItems());
         return "cart";
     }
 

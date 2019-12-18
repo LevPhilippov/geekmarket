@@ -46,3 +46,21 @@ INSERT into items (title, price) VALUES
 ('Bread', 20),
 ('Milk', 60),
 ('Apples', 120);
+
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders (
+    id bigserial PRIMARY KEY,
+    user_id bigint,
+    total_price numeric,
+    CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+DROP TABLE IF EXISTS cart_items;
+CREATE TABLE cart_items(
+    id bigserial PRIMARY KEY,
+    order_id bigint,
+    item_id bigint,
+    quantity integer,
+    CONSTRAINT fk_cartitems_orders FOREIGN KEY (order_id) REFERENCES orders (id),
+    CONSTRAINT fk_cartItems_items FOREIGN KEY (item_id) REFERENCES items(id)
+    );

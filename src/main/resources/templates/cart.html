@@ -21,6 +21,7 @@
                             <th>Название</th>
                             <th>Price</th>
                             <th>Количество</th>
+                            <th>Total price</th>
                             <th/>
                         </tr>
                     </thead>
@@ -29,6 +30,7 @@
                             <td th:text="${cartItem.getItem().getTitle()}"/>
                             <td th:text="${cartItem.getItem().getPrice()}"/>
                             <td th:text="${cartItem.getQuantity()}"/>
+                            <td th:text="${cartItem.getPosPrice()}"/>
                             <td>
                                 <a th:href="@{'/cart/delete?id=' + ${cartItem.getItem().getId()}}" class="btn btn-danger">Delete</a>
                             </td>
@@ -36,6 +38,7 @@
                     </tbody>
                 </table>
             </div>
+            <p><a class="btn btn-success" th:href="@{/cart/save}">Save order</a></p>
 <!--            <div th:if="${items.size()>0}">-->
 <!--                <h2 >Items:</h2>-->
 <!--                <table class="table table-hover" >-->

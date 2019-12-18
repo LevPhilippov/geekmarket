@@ -44,8 +44,8 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username)
                 .orElseThrow((Supplier<UsernameNotFoundException>) () -> new UsernameNotFoundException("Wrong username or password!"));
-        System.out.println(user);
-        System.out.println(user.getRoles() != null);
+//        System.out.println(user);
+//        System.out.println(user.getRoles() != null);
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities(user));
     }
 
