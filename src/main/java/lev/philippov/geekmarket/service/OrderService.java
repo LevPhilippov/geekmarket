@@ -8,6 +8,9 @@ import lev.philippov.geekmarket.repository.OrderRepository;
 import lev.philippov.geekmarket.utils.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -19,10 +22,16 @@ public class OrderService {
         this.orderRepository = orderRepository;
         this.cartItemRepository = cartItemRepository;
     }
-
-    public void saveOrder(User user, Cart cart, OrderInfo orderInfo){
+    @Transactional
+    public Order saveOrder(User user, Cart cart, OrderInfo orderInfo){
         Order order = new Order(user, cart, orderInfo);
         orderRepository.save(order);
         cart.clear();
+        return order;
+    }
+
+    @Transactional
+    public List<Order> findAllByUser(User user) {
+       return orderRepository.findAllByUser(user.getId());
     }
 }

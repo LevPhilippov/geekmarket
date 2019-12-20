@@ -57,4 +57,14 @@ public class CartItem {
     private void recalculate() {
         posPrice = item.getPrice().multiply(new BigDecimal(quantity));
     }
+
+    @Override
+    public String toString() {
+        return "CartItem{" +
+                "id=" + id +
+                ", item=" + item +
+                ", quantity=" + quantity +
+                ", posPrice=" + posPrice +
+                '}';
+    }
 }

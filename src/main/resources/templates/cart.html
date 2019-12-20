@@ -13,7 +13,7 @@
             <h1>Welcome to the Store!</h1>
             <div th:replace="~{navigation :: navigation('Cart')}"></div>
             <!--    Блок демонстрации результата-->
-            <div th:if="${!cartItemsMap.isEmpty()}">
+            <div th:if="${!cartItems.isEmpty()}">
                 <h2 >Cart:</h2>
                 <table class="table table-hover" >
                     <thead class="thead-dark">
@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="cartItem: ${cartItemsMap.values()}">
+                        <tr th:each="cartItem: ${cartItems}">
                             <td th:text="${cartItem.getItem().getTitle()}"/>
                             <td th:text="${cartItem.getItem().getPrice()}"/>
                             <td th:text="${cartItem.getQuantity()}"/>

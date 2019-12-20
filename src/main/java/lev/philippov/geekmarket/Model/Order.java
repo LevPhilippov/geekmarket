@@ -32,7 +32,7 @@ public class Order {
     @JoinColumn(name = "order_info_id")
     private OrderInfo orderInfo;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     private List<CartItem> cartItems;
 
 

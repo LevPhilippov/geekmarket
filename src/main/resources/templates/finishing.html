@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Finishing</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{navigation::navigation(orderInfo)}"></div>
+    <!--    Блок демонстрации результата-->
+    <div>
+        <table class="table table-hover" >
+            <thead class="thead-dark">
+            <tr>
+                <th>Название</th>
+                <th>Price</th>
+                <th>Количество</th>
+                <th>Total price</th>
+                <th/>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="cartItem: ${order.getCartItems()}">
+                <td th:text="${cartItem.getItem().getTitle()}"/>
+                <td th:text="${cartItem.getItem().getPrice()}"/>
+                <td th:text="${cartItem.getQuantity()}"/>
+                <td th:text="${cartItem.getPosPrice()}"/>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--    Блок информации о заказе-->
+    <div>
+        <h2 th:text="#{order}+${order.getId()}">Orders</h2>
+
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col" th:text="#{order.id}"></th>
+                <th scope="col" th:text="#{order.firstName}"></th>
+                <th scope="col" th:text="#{order.lastName}"></th>
+                <th scope="col">E-mail</th>
+                <th scope="col" th:text="#{order.phone}"></th>
+                <th scope="col" th:text="#{order.address}"></th>
+                <th scope="col" th:text="#{order.comment}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row" th:text="${order.id}"></th>
+                <td th:text="${order.orderInfo.firstName}"></td>
+                <td th:text="${order.orderInfo.lastName}"></td>
+                <td th:text="${order.orderInfo.email}"></td>
+                <td th:text="${order.orderInfo.phone}"></td>
+                <td th:text="${order.orderInfo.address}"></td>
+                <td th:text="${order.orderInfo.comment}"></td>
+            </tr>
+            </tbody>
+        </table>        </table>
+    </div>
+    <br>
+    <a class="btn btn-primary col-md-12" th:href="@{/shop}" th:text="#{nav.backtoshop}"></a>
+
+</div>
+
+</body>
+</html>

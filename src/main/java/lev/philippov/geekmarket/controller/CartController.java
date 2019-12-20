@@ -1,5 +1,6 @@
 package lev.philippov.geekmarket.controller;
 
+import lev.philippov.geekmarket.Model.Order;
 import lev.philippov.geekmarket.Model.OrderInfo;
 import lev.philippov.geekmarket.Model.User;
 import lev.philippov.geekmarket.errorHandlers.UserNotFoundException;
@@ -34,7 +35,8 @@ public class CartController {
 
     @GetMapping(value = "/cart")
     public String show(Model model) {
-        model.addAttribute("cartItemsMap", cart.getCartItemsMap());
+//        System.out.println(orderService.findAllByUser(1L));
+        model.addAttribute("cartItems", cart.getCartItemsMap().values());
         return "cart";
     }
 
@@ -45,10 +47,13 @@ public class CartController {
     }
 
     @PostMapping("/cart/save")
-    public String saveOrder(@ModelAttribute(name = "orderInfo") OrderInfo orderInfo, Principal principal){
+    public String saveOrder(@ModelAttribute(name = "orderInfo") OrderInfo orderInfo, Principal principal, Model model){
         User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
-        orderService.saveOrder(user, cart, orderInfo);
-        return "redirect:/shop";
+        Order order = orderService.saveOrder(user, cart, orderInfo);
+//        List<Order> orders = orderService.findAllByUser(user);
+        model.addAttribute(order);
+        return "finishing";
+//        return "redirect:/shop";
     }
 
     @GetMapping("/cart/save")
@@ -57,10 +62,7 @@ public class CartController {
         OrderInfo orderInfo = new OrderInfo(user);
         model.addAttribute(orderInfo);
         model.addAttribute("cartPrice",cart.getCartPrice());
-        model.addAttribute("cartItemsMap",cart.getCartItemsMap());
+        model.addAttribute("cartItems",cart.getCartItemsMap().values());
         return "orderInfo";
     }
-
-
-
 }
