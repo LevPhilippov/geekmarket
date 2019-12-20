@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org ">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
         <title>Items</title>
@@ -10,31 +10,34 @@
 
     <body>
         <div class="container">
-            <h1>Welcome to the Store!</h1>
-            <div th:replace="navigation :: navigation('Shop')"></div>
-        <!--    Блок выбора количества элементов на странице и сортировки -->
+            <h1 th:text="#{greet}"></h1>
+<!--           Replace fragment Навигация-->
+            <br>
+            <div th:replace="~{navigation :: navigation('Shop')}"></div>
+            <br>
+        <!--    Блок фильтров и сортировки -->
             <div>
                 <form th:action="@{'/shop'}" method="get" class="form-inline">
-                    <span>Параметры фильтра:&nbsp;&nbsp;</span>
-                    <input th:name="minPrice" type="number" th:value="${param.minPrice} " placeholder="Минимальная цена" class="form-control">
-                    <input th:name="maxPrice" type="number" th:value="${param.maxPrice}" placeholder="Максимальная цена" class="form-control">
+                    <span th:text="#{filters}">Параметры фильтра:</span>
+                    <input th:name="keyword" type="text" th:value="${param.keyword}" class="form-control" th:placeholder="#{filters.keyword}">
+                    <input th:name="minPrice" type="number" th:value="${param.minPrice} " class="form-control" th:placeholder="#{filters.price.min}">
+                    <input th:name="maxPrice" type="number" th:value="${param.maxPrice}" th:placeholder="#{filters.price.max}" class="form-control">
                     <select class="form-control" th:name="itemsNumber" size="1">
                         <option th:value="5">5</option>
                         <option selected th:value="10">10</option>
                         <option th:value="15">15</option>
                     </select>
-                    <button type="submit" class="btn btn-primary">Фильтровать</button>
-                    <a class="btn btn-danger" th:href="@{'/shop'}">Сброс фильтра</a>
+                    <button type="submit" class="btn btn-primary" th:text="#{filters.apply}">Фильтровать</button>
+                    <a class="btn btn-danger" th:href="@{'/shop'}" th:text="#{filters.reset}">Сброс фильтра</a>
                 </form>
             </div>
-            <!--    Блок выбора количества элементов на странице и сортировки -->
+            <br>
             <!--    Блок демонстрации результата-->
             <div th:if="${pageItems.getContent().size()>0}">
                 <h2 >Items:</h2>
                 <table class="table table-hover" >
                     <thead class="thead-dark">
                         <tr>
-                            <th>ID</th>
                             <th>Название</th>
                             <th>Price</th>
                             <th/>
@@ -42,32 +45,18 @@
                     </thead>
                     <tbody>
                         <tr th:each="item : ${pageItems.getContent()}">
-                            <td th:text="${item.id}"/>
                             <td th:text="${item.title}"/>
                             <td th:text="${item.price}"/>
                             <td>
-                                <a th:href="@{'/shop/add?id=' + ${item.id}}" class="btn btn-success">Add to Cart</a>
+                                <a th:href="@{'/shop/add?id=' + ${item.id}}" class="btn btn-success" th:text="#{shop.add}">Add to Cart</a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <!--    Блок демонстрации результата-->
-            <!--    Навигация-->
-            <nav aria-label="...">
-                <ul class="pagination">
-                    <li class="page-item" th:classappend="${pageItems.getNumber() + 1 == 1 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{'/shop?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${pageItems.getNumber()-1} + ${filters}}" tabindex="-1">Previous</a>
-                    </li>
-                    <li class="page-item" th:classappend="(${pageItems.getNumber() + 1 == i? 'active' : ''})" th:each="i: ${#numbers.sequence(1,pageItems.getTotalPages(),1)}">
-                        <a th:text="${i}" class="page-link" th:href="@{'/shop?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${i-1} + ${filters}}">2<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="page-item" th:classappend="(${pageItems.getNumber() + 1 == pageItems.getTotalPages() ? 'disabled' : ''})">
-                        <a class="page-link" th:href="@{'/shop?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${pageItems.getNumber()+1} + ${filters}}">Next</a>
-                    </li>
-                </ul>
-            </nav>
-            <!--    Навигация-->
+
+            <!--   Fragment Навигация-->
+            <div th:replace="~{pagination :: pagination}"/>
         </div>
     </body>
 </html>

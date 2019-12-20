@@ -22,6 +22,7 @@ public class Cart {
     @PostConstruct
     private void init() {
         cartItemsMap = new HashMap<>();
+        cartPrice = new BigDecimal(0);
     }
 
     public void add(Item item) {
@@ -31,6 +32,7 @@ public class Cart {
         }
         else
             cartItemsMap.put(item.getId(),new CartItem(item,1));
+        recalculate();
     }
 
     public Map<Long, CartItem> getCartItemsMap() {
@@ -46,13 +48,19 @@ public class Cart {
                 cartItemsMap.get(id).setQuantity(updatableCartItem.getQuantity()-1);
             }
         }
+        recalculate();
+    }
+
+    public void clear() {
+        cartItemsMap.clear();
+        cartPrice = new BigDecimal(0);
     }
 
     public BigDecimal getCartPrice() {
         return cartPrice;
     }
 
-    public void setCartPrice(BigDecimal cartPrice) {
-        this.cartPrice = cartPrice;
+    private void recalculate() {
+        cartItemsMap.values().forEach(cartItem -> cartPrice = cartPrice.add(cartItem.getPosPrice()));
     }
 }

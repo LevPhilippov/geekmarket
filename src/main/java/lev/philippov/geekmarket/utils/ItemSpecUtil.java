@@ -14,6 +14,10 @@ public class ItemSpecUtil {
             Specification<Item> specs = Specification.where(null);
             StringBuilder filterBuilder = new StringBuilder();
 
+            if(paramsMap.containsKey("keyword") && !paramsMap.get("keyword")[0].isEmpty()) {
+                String keyword = paramsMap.get("keyword")[0];
+                specs=specs.and(ItemSpec.like(keyword));
+            }
             if(paramsMap.containsKey("minPrice") && !paramsMap.get("minPrice")[0].isEmpty()) {
                 Double minPrice = Double.parseDouble(paramsMap.get("minPrice")[0]);
                 specs = specs.and(ItemSpec.byPriceGreaterThan(minPrice));

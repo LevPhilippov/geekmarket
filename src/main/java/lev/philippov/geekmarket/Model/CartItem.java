@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 public class CartItem {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -28,8 +28,8 @@ public class CartItem {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "pos_price")
     private BigDecimal posPrice;
-
 
     public CartItem(Item item, int quantity) {
         this.item = item;

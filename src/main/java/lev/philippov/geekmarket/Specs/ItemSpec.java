@@ -13,4 +13,8 @@ public class ItemSpec {
         return (Specification<Item>) (root, query, criteriaBuilder) -> criteriaBuilder.lessThan(root.get("price"), maxPrice);
     }
 
+    public static Specification<Item> like(String keyword) {
+        return (Specification<Item>) (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("title"),"%"+keyword+"%");
+    }
+
 }

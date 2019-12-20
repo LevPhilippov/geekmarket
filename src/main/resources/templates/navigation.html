@@ -17,31 +17,31 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item" th:classappend="${activeTab == 'Home' ? 'active' : ''}">
-                    <a class="nav-link" th:href="@{/}">Home</a>
+                    <a class="nav-link" th:href="@{/}" th:text="#{nav.home}">Home</a>
                 </li>
                 <li class="nav-item" th:classappend="${activeTab == 'Shop' ? 'active' : ''}">
-                    <a class="nav-link" th:href="@{/shop}">Shop</a>
+                    <a class="nav-link" th:href="@{/shop}" th:text="#{nav.shop}">Shop</a>
                 </li>
                 <li class="nav-item" th:classappend="${activeTab == 'Cart' ? 'active' : ''}">
-                    <a class="nav-link" th:href="@{/cart}">Cart</a>
+                    <a class="nav-link" th:href="@{/cart}" th:text="#{nav.cart}">Cart</a>
                 </li>
                 <li sec:authorize="hasRole('ADMIN')" class="nav-item"
                     th:classappend="${activeTab == 'AdminDashboard' ? 'active' : ''}">
-                    <a class="nav-link" th:href="@{/admin}">Admin Dashboard</a>
+                    <a class="nav-link" th:href="@{/admin}" th:text="#{admin.board}">Admin Dashboard</a>
                 </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <form th:action="@{/logout}" method="POST">
-                        <input type="submit" class="btn btn-danger" value="Logout"/>
+                        <input type="submit" class="btn btn-danger" value="Logout" th:value="#{nav.logout}"/>
                     </form>
                 </li>
                 <li sec:authorize="isAnonymous()" class="nav-item">
                     <form class="align-middle" th:action="@{/authenticateTheUser}" method="POST">
                         <div class="input-group-prepend">
                             <input class="form-control" type="text" placeholder="Login" name="username"
-                                   aria-describedby="inputGroup-sizing-sm">
+                                   aria-describedby="inputGroup-sizing-sm" th:placeholder="#{nav.login}">
                             <input class="form-control" type="text" placeholder="Password" name="password"
-                                   aria-describedby="inputGroup-sizing-sm">
-                            <button class="btn btn-primary btn-sm" type="submit">Log In</button>
+                                   aria-describedby="inputGroup-sizing-sm" th:placeholder="#{nav.password}">
+                            <button class="btn btn-primary btn-sm" type="submit" th:text="#{nav.login.submit}">Log In</button>
                         </div>
                     </form>
                 </li>

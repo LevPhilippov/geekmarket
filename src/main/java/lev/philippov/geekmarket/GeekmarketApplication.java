@@ -10,5 +10,5 @@ public class GeekmarketApplication {
     public static void main(String[] args) {
         ApplicationContext applicationContext = SpringApplication.run(GeekmarketApplication.class, args);
     }
-
+    //TODO: Сделать интернационализацию, сделать ДЗ;
 }

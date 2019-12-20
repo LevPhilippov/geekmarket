@@ -14,8 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Order {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -23,15 +24,23 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
-    private List<CartItem> cartItems;
 
     @Column(name = "total_price")
     private BigDecimal totalPrice;
 
-    public Order (User user, Cart cart) {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_info_id")
+    private OrderInfo orderInfo;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
+    private List<CartItem> cartItems;
+
+
+    public Order (User user, Cart cart, OrderInfo orderInfo) {
         this.user = user;
         this.cartItems = new ArrayList<>();
+        this.orderInfo=orderInfo;
+//        this.orderInfo.setOrder(this);
         for(CartItem i : cart.getCartItemsMap().values()) {
             i.setOrder(this);
             cartItems.add(i);

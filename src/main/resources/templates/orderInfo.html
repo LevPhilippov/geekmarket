@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Order Info</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div th:replace="~{navigation::navigation(orderInfo)}"></div>
+        <!--    Блок демонстрации результата-->
+        <div th:if="${!cartItemsMap.isEmpty()}">
+            <h2 th:text="#{order}"></h2>
+            <table class="table table-hover" >
+                <thead class="thead-dark">
+                <tr>
+                    <th>Название</th>
+                    <th>Price</th>
+                    <th>Количество</th>
+                    <th>Total price</th>
+                    <th/>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cartItem: ${cartItemsMap.values()}">
+                    <td th:text="${cartItem.getItem().getTitle()}"/>
+                    <td th:text="${cartItem.getItem().getPrice()}"/>
+                    <td th:text="${cartItem.getQuantity()}"/>
+                    <td th:text="${cartItem.getPosPrice()}"/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+<!--        Форма заполенения информации о пользователе-->
+        <form th:action="@{'/cart/save'}" method="post" th:object="${orderInfo}">
+
+            <label for="firstName" th:text="#{order.firstName}">First Name</label>
+            <input id="firstName" th:type="text" th:field="*{firstName}" th:value="*{firstName}"  class="form-control">
+
+            <label for="lastName" th:text="#{order.lastName}">Last Name</label>
+            <input id="lastName"  th:type="text" th:field="*{lastName}" th:value="*{lastName}" class="form-control">
+
+            <label for="phone" th:text="#{order.phone}">Phone</label>
+            <input id="phone" th:type="text" th:field="*{phone}" th:value="*{phone}" class="form-control">
+
+            <label for="address" th:text="#{order.address}">Address</label>
+            <input id="address" th:type="text" th:field="*{address}" class="form-control">
+
+            <label for="email">E-mail</label>
+            <input id="email" th:type="text" th:field="*{email}" class="form-control">
+
+            <label for="comment">Comments</label>
+            <textarea id="comment" th:type="text" th:field="*{comment}" class="form-control" rows="5"></textarea>
+
+            <button type="submit" th:text="#{order.submit}" class="btn btn-primary col-md-12">Submit</button>
+        </form>
+    </div>
+
+</body>
+</html>

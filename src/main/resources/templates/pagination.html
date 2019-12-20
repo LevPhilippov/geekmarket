@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<nav aria-label="..." th:fragment="pagination">
+    <ul class="pagination">
+        <li class="page-item" th:classappend="${pageItems.getNumber() + 1 == 1 ? 'disabled' : ''}">
+            <a class="page-link" th:href="@{'/shop?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${pageItems.getNumber()-1} + ${filters}}" tabindex="-1" th:text="#{paging.prev}">Previous</a>
+        </li>
+        <li class="page-item" th:classappend="(${pageItems.getNumber() + 1 == i? 'active' : ''})" th:each="i: ${#numbers.sequence(1,pageItems.getTotalPages(),1)}">
+            <a th:text="${i}" class="page-link" th:href="@{'/shop?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${i-1} + ${filters}}">2<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="page-item" th:classappend="(${pageItems.getNumber() + 1 == pageItems.getTotalPages() ? 'disabled' : ''})">
+            <a class="page-link" th:href="@{'/shop?itemsNumber=' + ${pageItems.getSize()} + '&pageNumber=' + ${pageItems.getNumber()+1} + ${filters}}" th:text="#{paging.next}">Next</a>
+        </li>
+    </ul>
+</nav>
+
+</body>
+</html>
