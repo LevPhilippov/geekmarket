@@ -11,7 +11,7 @@
     <div class="container">
         <div th:replace="~{navigation::navigation(orderInfo)}"></div>
         <!--    Блок демонстрации результата-->
-        <div th:if="${!cartItems.isEmpty()}">
+        <div>
             <h2 th:text="#{order}"></h2>
             <table class="table table-hover" >
                 <thead class="thead-dark">
@@ -24,7 +24,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="cartItem: ${cartItems}">
+                <tr th:each="cartItem: ${order.getCartItems()}">
                     <td th:text="${cartItem.getItem().getTitle()}"/>
                     <td th:text="${cartItem.getItem().getPrice()}"/>
                     <td th:text="${cartItem.getQuantity()}"/>
@@ -34,7 +34,7 @@
             </table>
         </div>
 <!--        Форма заполенения информации о пользователе-->
-        <form th:action="@{'/cart/save'}" method="post" th:object="${orderInfo}">
+        <form th:action="@{'/cart/save'}" method="post" th:object="${order}">
 
             <label for="firstName" th:text="#{order.firstName}">First Name</label>
             <input id="firstName" th:type="text" th:field="*{firstName}" th:value="*{firstName}"  class="form-control">

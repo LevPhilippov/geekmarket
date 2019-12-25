@@ -1,7 +1,6 @@
 package lev.philippov.geekmarket.controller;
 
 import lev.philippov.geekmarket.Model.Order;
-import lev.philippov.geekmarket.Model.OrderInfo;
 import lev.philippov.geekmarket.Model.User;
 import lev.philippov.geekmarket.errorHandlers.UserNotFoundException;
 import lev.philippov.geekmarket.service.ItemService;
@@ -47,22 +46,22 @@ public class CartController {
     }
 
     @PostMapping("/cart/save")
-    public String saveOrder(@ModelAttribute(name = "orderInfo") OrderInfo orderInfo, Principal principal, Model model){
-        User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
-        Order order = orderService.saveOrder(user, cart, orderInfo);
+    public String saveOrder(@ModelAttribute(name = "order") Order order, Principal principal, Model model){
+//        User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
+        order = orderService.saveOrder(order);
+        cart.clear();
 //        List<Order> orders = orderService.findAllByUser(user);
         model.addAttribute(order);
-        return "finishing";
-//        return "redirect:/shop";
+        return "show_order_details";
     }
 
     @GetMapping("/cart/save")
     public String verifyOrderDetails(Model model,Principal principal ) {
         User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
-        OrderInfo orderInfo = new OrderInfo(user);
-        model.addAttribute(orderInfo);
-        model.addAttribute("cartPrice",cart.getCartPrice());
-        model.addAttribute("cartItems",cart.getCartItemsMap().values());
-        return "orderInfo";
+        Order order = new Order(user,cart);
+        model.addAttribute(order);
+//        model.addAttribute("cartPrice",cart.getCartPrice());
+//        model.addAttribute("cartItems",cart.getCartItemsMap().values());
+        return "fill_order_details";
     }
 }

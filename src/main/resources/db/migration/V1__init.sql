@@ -30,7 +30,7 @@ INSERT INTO roles (name)
 VALUES
 ('ROLE_USER'), ('ROLE_MANAGER'), ('ROLE_ADMIN');
 
-INSERT INTO users (username, password, first_name, last_name, email,phone)
+INSERT INTO users (username, password, first_name, last_name, email, phone)
 VALUES
 ('admin','$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i','Admin','Admin','admin@gmail.com','+79881111111');
 
@@ -47,25 +47,18 @@ INSERT into items (title, price) VALUES
 ('Milk', 60),
 ('Apples', 120);
 
-DROP TABLE IF EXISTS order_info;
-CREATE TABLE order_info(
+DROP TABLE IF EXISTS orders;
+CREATE TABLE orders (
     id bigserial PRIMARY KEY,
+    user_id bigint,
+    total_price numeric,
     first_name varchar(255),
     last_name varchar(255),
     phone varchar(255),
     email varchar(255),
     address text,
-    comment text
-    );
-
-DROP TABLE IF EXISTS orders;
-CREATE TABLE orders (
-    id bigserial PRIMARY KEY,
-    user_id bigint,
-    order_info_id bigint,
-    total_price numeric,
-    CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENCES users (id),
-    CONSTRAINT fk_orders_orderinfo FOREIGN KEY (order_info_id) REFERENCES order_info(id)
+    comment text,
+    CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
 DROP TABLE IF EXISTS cart_items;

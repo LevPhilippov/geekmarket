@@ -38,7 +38,8 @@
                     </tbody>
                 </table>
             </div>
-            <p sec:authorize="isAuthenticated()"><a class="btn btn-success" th:href="@{/cart/save}">Save order</a></p>
+            <p sec:authorize="isAuthenticated()" th:if="${!cartItems.isEmpty()}"><a class="btn btn-success" th:href="@{/cart/save}">Save order</a></p>
+            <p style="font-weight: bold" th:if="${cartItems.isEmpty()}" th:text="#{cart.emptyCart}"></p>
             <!--    Блок демонстрации результата-->
         </div>
     </body>
