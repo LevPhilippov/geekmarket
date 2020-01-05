@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Order Info</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{navigation::navigation(signin)}"></div>
+    <h1>Registration Form</h1>
+    <!--        Форма заполенения информации о пользователе-->
+    <form th:action="@{'/validateAndSaveUser'}" method="post" th:object="${user}">
+
+        <label for="input-username" th:text="#{reg.username}">Username</label>
+        <input id="input-username" type="text" class="form-control" th:field="*{username}" minlength="3" maxlength="255">
+
+        <label for="firstName" th:text="#{order.firstName}">First Name</label>
+        <input id="firstName" th:type="text" th:field="*{firstName}" class="form-control" minlength="3" maxlength="255">
+
+        <label for="lastName" th:text="#{order.lastName}">Last Name</label>
+        <input id="lastName"  th:type="text" th:field="*{lastName}" class="form-control" minlength="3" maxlength="255">
+
+        <label for="phone" th:text="#{order.phone}">Phone</label>
+        <input id="phone" th:type="text" th:field="*{phone}" class="form-control" minlength="12" maxlength="12">
+
+        <label for="email">E-mail</label>
+        <input id="email" th:type="text" th:field="*{email}" class="form-control">
+        <br>
+        <button type="submit" class="btn btn-success col-md-12" th:text="reg.save">Save</button>
+    </form>
+</div>
+
+</body>
+</html>

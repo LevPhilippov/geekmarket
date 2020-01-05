@@ -42,10 +42,40 @@
                             <input class="form-control" type="text" placeholder="Password" name="password"
                                    aria-describedby="inputGroup-sizing-sm" th:placeholder="#{nav.password}">
                             <button class="btn btn-primary btn-sm" type="submit" th:text="#{nav.login.submit}">Log In</button>
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#signin" th:text="#{reg.signIn}">Sign in</button>
                         </div>
                     </form>
                 </li>
             </ul>
         </div>
     </nav>
+
+
+    <div class="modal fade" id="signin" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" th:text="#{reg.signIn}">Sign In</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{'/signin'}" method="post">
+                        <div class="form-group">
+                            <label for="input-phone" class="col-form-label" th:text="#{order.phone}">Phone:</label>
+                            <input id="input-phone" type="text" class="form-control" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="input-password" class="col-form-label" th:text="#{nav.password}">Password:</label>
+                            <input id="input-password" class="form-control" type="password" name="password"></input>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" th:text="#{reg.signIn}">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
