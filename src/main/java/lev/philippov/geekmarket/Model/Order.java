@@ -8,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 @Entity
 @Table(name = "orders")
@@ -51,8 +53,8 @@ public class Order {
     @Column(name = "comment")
     private String comment;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
-    private List<CartItem> cartItems;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
+    private Collection<CartItem> cartItems;
 
     public Order (User user, Cart cart) {
         this.user = user;
@@ -68,6 +70,16 @@ public class Order {
         this.email = user.getEmail();
         this.phone = user.getPhone();
 
+        this.totalPrice = cart.getCartPrice();
+    }
+
+    public void prepareForSaving(User user, Cart cart){
+        this.user = user;
+        this.cartItems = new ArrayList<>();
+        cartItems.addAll(cart.getCartItemsMap().values());
+        for (CartItem cartItem : cartItems) {
+            cartItem.setOrder(this);
+        }
         this.totalPrice = cart.getCartPrice();
     }
 }

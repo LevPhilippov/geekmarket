@@ -8,36 +8,63 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
-    <div th:replace="~{navigation::navigation(profile)}"></div>
-    <h1>Profile</h1>
-    <!--        Форма заполенения информации о пользователе-->
-    <form th:action="@{'/validateAndSaveUser'}" method="post" th:object="${user}">
+    <div class="container">
+        <div th:replace="~{navigation::navigation(profile)}"></div>
+        <h1>Profile</h1>
 
-        <label for="input-username" th:text="#{reg.username}">Username</label>
-        <input id="input-username" type="text" class="form-control" th:field="*{username}" minlength="3" maxlength="255">
-        <small><p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect username</p></small>
+        <!--        Форма заполенения информации о пользователе-->
+        <form th:action="@{'#'}" method="post" th:object="${user}">
 
-        <label for="firstName" th:text="#{order.firstName}">First Name</label>
-        <input id="firstName" th:type="text" th:field="*{firstName}" class="form-control" minlength="3" maxlength="255">
-        <small><p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Incorrect First Name</p></small>
+            <label for="input-username" th:text="#{reg.username}">Username</label>
+            <input id="input-username" type="text" class="form-control" th:field="*{username}" minlength="3" maxlength="255" readonly>
+            <small><p th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Incorrect username</p></small>
 
-        <label for="lastName" th:text="#{order.lastName}">Last Name</label>
-        <input id="lastName"  th:type="text" th:field="*{lastName}" class="form-control" minlength="3" maxlength="255">
-        <small><p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Incorrect Last Name</p></small>
+            <label for="firstName" th:text="#{order.firstName}">First Name</label>
+            <input id="firstName" th:type="text" th:field="*{firstName}" class="form-control" minlength="3" maxlength="255" readonly>
+            <small><p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Incorrect First Name</p></small>
 
-        <label for="phone" th:text="#{order.phone}">Phone</label>
-        <input id="phone" th:type="text" th:field="*{phone}" class="form-control" minlength="12" maxlength="12">
-        <small><p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Incorrect Phone</p></small>
+            <label for="lastName" th:text="#{order.lastName}">Last Name</label>
+            <input id="lastName"  th:type="text" th:field="*{lastName}" class="form-control" minlength="3" maxlength="255" readonly>
+            <small><p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Incorrect Last Name</p></small>
 
-        <label for="email">E-mail</label>
-        <input id="email" th:type="text" th:field="*{email}" class="form-control">
-        <small><p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect E-mail</p></small>
+            <label for="phone" th:text="#{order.phone}">Phone</label>
+            <input id="phone" th:type="text" th:field="*{phone}" class="form-control" minlength="12" maxlength="12" readonly>
+            <small><p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Incorrect Phone</p></small>
 
-        <br>
-        <button type="submit" class="btn btn-success col-md-12" th:text="reg.save">Save</button>
-    </form>
-</div>
+            <label for="email">E-mail</label>
+            <input id="email" th:type="text" th:field="*{email}" class="form-control" readonly>
+            <small><p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Incorrect E-mail</p></small>
 
+        </form>
+        <h2>Orders</h2>
+        <table class="table table-hover" >
+            <thead class="thead-dark">
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Price</th>
+                <th>Consists</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order: ${orderList}">
+                <td th:text="${order.id}"/>
+                <td/>
+                <td th:text="${order.getTotalPrice()}"/>
+                <td>
+                    <table>
+                        <tbody>
+                        <tr th:each="ci: ${order.getCartItems()}">
+                            <td th:text="${ci.getItem().getTitle()}"/>
+                            <td th:text="${ci.getQuantity()}"/>
+                            <td th:text="${ci.getPosPrice()}"/>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

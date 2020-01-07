@@ -34,7 +34,6 @@ public class CartController {
 
     @GetMapping(value = "/cart")
     public String show(Model model) {
-//        System.out.println(orderService.findAllByUser(1L));
         model.addAttribute("cartItems", cart.getCartItemsMap().values());
         return "cart";
     }
@@ -47,10 +46,10 @@ public class CartController {
 
     @PostMapping("/cart/save")
     public String saveOrder(@ModelAttribute(name = "order") Order order, Principal principal, Model model){
-//        User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
+        User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
+        order.prepareForSaving(user,cart);
         order = orderService.saveOrder(order);
         cart.clear();
-//        List<Order> orders = orderService.findAllByUser(user);
         model.addAttribute(order);
         return "show_order_details";
     }
@@ -60,8 +59,6 @@ public class CartController {
         User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
         Order order = new Order(user,cart);
         model.addAttribute(order);
-//        model.addAttribute("cartPrice",cart.getCartPrice());
-//        model.addAttribute("cartItems",cart.getCartItemsMap().values());
         return "fill_order_details";
     }
 }
