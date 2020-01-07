@@ -3,9 +3,9 @@ CREATE TABLE users (
   id                    bigserial,
   username              varchar(50) NOT NULL,
   password              varchar(80) NOT NULL,
-  first_name            VARCHAR(50) NOT NULL,
-  last_name             VARCHAR(50) NOT NULL,
-  email                 VARCHAR(50) NOT NULL,
+  first_name            VARCHAR(50),
+  last_name             VARCHAR(50),
+  email                 VARCHAR(50),
   phone                 VARCHAR(15) NOT NULL,
   PRIMARY KEY (id)
 );

@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
-    <title>Order Info</title>
+    <title>Profile</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container">
-    <div th:replace="~{navigation::navigation(signin)}"></div>
-    <h1>Registration Form</h1>
+    <div th:replace="~{navigation::navigation(profile)}"></div>
+    <h1>Profile</h1>
     <!--        Форма заполенения информации о пользователе-->
     <form th:action="@{'/validateAndSaveUser'}" method="post" th:object="${user}">
 

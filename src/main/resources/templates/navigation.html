@@ -49,8 +49,7 @@
             </ul>
         </div>
     </nav>
-
-
+<!--    Форма быстрой регистрации-->
     <div class="modal fade" id="signin" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -64,16 +63,17 @@
                     <form th:action="@{'/signin'}" method="post">
                         <div class="form-group">
                             <label for="input-phone" class="col-form-label" th:text="#{order.phone}">Phone:</label>
-                            <input id="input-phone" type="text" class="form-control" name="phone">
+                            <input id="input-phone" type="text" class="form-control" name="phone" pattern="\++\d{11}">
+                            <small th:text="#{reg.phone.rec}"></small>
                         </div>
                         <div class="form-group">
                             <label for="input-password" class="col-form-label" th:text="#{nav.password}">Password:</label>
-                            <input id="input-password" class="form-control" type="password" name="password"></input>
+                            <input id="input-password" class="form-control" type="password" name="password" minlength="5">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success" th:text="#{reg.signIn}">Sign In</button>
                         </div>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success" th:text="#{reg.signIn}">Sign In</button>
                 </div>
             </div>
         </div>

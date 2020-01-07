@@ -4,6 +4,7 @@ import lev.philippov.geekmarket.Model.Role;
 import lev.philippov.geekmarket.Model.User;
 import lev.philippov.geekmarket.repository.RoleRepository;
 import lev.philippov.geekmarket.repository.UserRepository;
+import org.hibernate.NonUniqueResultException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Optional<User> findByUsername(String username) {
+    public Optional<User> findByUsername(String username) throws NonUniqueResultException{
         return userRepository.findUserByUsername(username);
     }
 

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
 
@@ -41,6 +42,7 @@ public class User {
 
     @Column(name = "phone")
     @Size(min=12,max=12)
+    @Pattern(regexp = "\\++\\d{11}", message = "The phone must match a the pattern: +71111111111")
     private String phone;
 
     @ManyToMany(fetch = FetchType.LAZY)
