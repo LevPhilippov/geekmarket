@@ -1,5 +1,6 @@
 package lev.philippov.geekmarket.service;
 
+import lev.philippov.geekmarket.Model.Order;
 import lev.philippov.geekmarket.Model.Role;
 import lev.philippov.geekmarket.Model.User;
 import lev.philippov.geekmarket.repository.RoleRepository;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -26,11 +28,14 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private OrderService orderService;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder, OrderService orderService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.orderService = orderService;
     }
 
     @Override
@@ -40,12 +45,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByPhone(String phone) {
+        return userRepository.findByPhone(phone);
+    }
+
+    @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = findByUsername(username)
                 .orElseThrow((Supplier<UsernameNotFoundException>) () -> new UsernameNotFoundException("Wrong username or password!"));
-//        System.out.println(user);
-//        System.out.println(user.getRoles() != null);
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities(user));
     }
 
@@ -54,12 +62,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User saveUser(User user) {
+//        Подвязываем пароль, и роли
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Collection<Role> roles = new ArrayList<>();
         Role simpleUser = roleRepository.findByName("ROLE_USER");
         roles.add(simpleUser);
         user.setRoles(roles);
-        return userRepository.save(user);
+        user = userRepository.save(user);
+//        Подвязываем заказы (при наличии)
+        List<Order> orderList = orderService.findAllByPhone(user.getPhone());
+        for (Order order : orderList) {
+            order.setUser(user);
+        }
+        orderService.flush();
+        return user;
     }
 }

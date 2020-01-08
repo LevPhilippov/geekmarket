@@ -63,18 +63,34 @@ public class Order {
             i.setOrder(this);
             cartItems.add(i);
         }
-
         //TODO: можно добавить popup "Использовать данные профиля?"
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.phone = user.getPhone();
-
         this.totalPrice = cart.getCartPrice();
+    }
+
+    public Order(Cart cart) {
+        this.cartItems = new ArrayList<>();
+        this.totalPrice = cart.getCartPrice();
+        for(CartItem i : cart.getCartItemsMap().values()) {
+            i.setOrder(this);
+            cartItems.add(i);
+        }
     }
 
     public void prepareForSaving(User user, Cart cart){
         this.user = user;
+        this.cartItems = new ArrayList<>();
+        cartItems.addAll(cart.getCartItemsMap().values());
+        for (CartItem cartItem : cartItems) {
+            cartItem.setOrder(this);
+        }
+        this.totalPrice = cart.getCartPrice();
+    }
+
+    public void prepareForSaving(Cart cart) {
         this.cartItems = new ArrayList<>();
         cartItems.addAll(cart.getCartItemsMap().values());
         for (CartItem cartItem : cartItems) {

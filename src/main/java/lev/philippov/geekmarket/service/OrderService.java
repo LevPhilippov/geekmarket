@@ -29,4 +29,13 @@ public class OrderService {
     public List<Order> findAllByUser(User user) {
        return orderRepository.findAllByUser(user.getId());
     }
+
+    @Transactional
+    public List<Order> findAllByPhone(String phone) {
+        return orderRepository.findAllByPhone(phone);
+    }
+
+    public void flush() {
+        orderRepository.flush();
+    }
 }

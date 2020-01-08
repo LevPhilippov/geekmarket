@@ -46,8 +46,12 @@ public class CartController {
 
     @PostMapping("/cart/save")
     public String saveOrder(@ModelAttribute(name = "order") Order order, Principal principal, Model model){
-        User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
-        order.prepareForSaving(user,cart);
+        if (principal != null) {
+            User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
+            order.prepareForSaving(user,cart);
+        } else {
+            order.prepareForSaving(cart);
+        }
         order = orderService.saveOrder(order);
         cart.clear();
         model.addAttribute(order);
@@ -60,5 +64,14 @@ public class CartController {
         Order order = new Order(user,cart);
         model.addAttribute(order);
         return "fill_order_details";
+    }
+
+    @PostMapping("/oneClickPurchase")
+    public String oneClickPurchase(@RequestParam(name = "phone") String phone, Model model){
+        Order order = new Order(cart);
+        order.setPhone(phone);
+        model.addAttribute(order);
+        return "fill_order_details";
+        //TODO: при попытке оформить заказ на номер телефона, уже существующий в базе необюходимо запрашивать авторизациию
     }
 }

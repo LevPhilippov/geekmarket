@@ -31,6 +31,7 @@ public class SignInController {
         user.setPassword(password);
         userService.saveUser(user);
         model.addAttribute(user);
+        //TODO: при подобной регистьрации необходимо отправлять код подтверждения но сот. тел. для подтверждения личности реристрируемого
         return "signin";
     }
 
