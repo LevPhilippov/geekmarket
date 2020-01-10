@@ -47,6 +47,16 @@ INSERT into items (title, price) VALUES
 ('Milk', 60),
 ('Apples', 120);
 
+DROP TABLE IF EXISTS user_comments;
+CREATE TABLE user_comments(
+    id bigserial PRIMARY KEY,
+    score int NOT NULL,
+    comment text,
+    item_id bigint,
+    CONSTRAINT fk_user_comments_items FOREIGN KEY (item_id) REFERENCES items (id)
+    );
+
+
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
     id bigserial PRIMARY KEY,

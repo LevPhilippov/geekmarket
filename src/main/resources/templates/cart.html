@@ -27,7 +27,7 @@
                     </thead>
                     <tbody>
                         <tr th:each="cartItem: ${cartItems}">
-                            <td th:text="${cartItem.getItem().getTitle()}"/>
+                            <td> <a th:text="${cartItem.getItem().getTitle()}" th:href="@{'/showItemCard/'+${cartItem.getItem().id}}">Item</a></td>
                             <td th:text="${cartItem.getItem().getPrice()}"/>
                             <td th:text="${cartItem.getQuantity()}"/>
                             <td th:text="${cartItem.getPosPrice()}"/>

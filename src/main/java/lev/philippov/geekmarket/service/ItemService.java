@@ -51,4 +51,8 @@ public class ItemService {
     public void deleteById(Long id) {
         itemRepository.deleteById(id);
     }
+
+    public void flush(){
+        itemRepository.flush();
+    }
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Item card</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div th:replace="~{navigation:: navigation(itemCard)}"/>
+    <div class="container">
+        <img style="height: 300px; width: 300px;">
+        <h1 th:text="${item.title}">Item card</h1>
+        <h2 th:text="${item.price}">Price</h2>
+        <h3 th:text="${rating}">Rating</h3>
+        <p>Reviews</p>
+        <ul th:each="comment:${comments}">
+            <li th:text="${comment.getComment()}">Comment1</li>
+        </ul>
+
+        <form method="post" th:action="@{/insertItemComment}">
+            <input type="hidden" name="item_id" th:value="${item.id}">
+            <label for="input_rating">Rating</label>
+            <select id="input_rating" class="form-control" th:name="rating" size="1" required>
+                <option th:value="1">1</option>
+                <option th:value="2">2</option>
+                <option th:value="3">3</option>
+                <option th:value="4">4</option>
+                <option th:value="5">5</option>
+            </select>
+            <textarea name="comment" placeholder="Enter your comment" class="form-control"></textarea>
+            <button class="btn btn-success" type="submit"></button>
+        </form>
+    </div>
+</body>
+</html>
