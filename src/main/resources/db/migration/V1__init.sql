@@ -53,7 +53,9 @@ CREATE TABLE user_comments(
     score int NOT NULL,
     comment text,
     item_id bigint,
-    CONSTRAINT fk_user_comments_items FOREIGN KEY (item_id) REFERENCES items (id)
+    user_id bigint,
+    CONSTRAINT fk_user_comments_items FOREIGN KEY (item_id) REFERENCES items (id),
+    CONSTRAINT fk_user_comments_user FOREIGN KEY (user_id) REFERENCES users (id)
     );
 
 

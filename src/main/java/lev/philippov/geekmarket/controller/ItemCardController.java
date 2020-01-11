@@ -1,8 +1,13 @@
 package lev.philippov.geekmarket.controller;
 
 import lev.philippov.geekmarket.Model.Item;
+import lev.philippov.geekmarket.Model.User;
 import lev.philippov.geekmarket.Model.UserComment;
+import lev.philippov.geekmarket.errorHandlers.UserNotFoundException;
 import lev.philippov.geekmarket.service.ItemService;
+import lev.philippov.geekmarket.service.UserService;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,24 +15,27 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class ItemCardController {
     ItemService itemService;
+    UserService userService;
 
-    public ItemCardController(ItemService itemService) {
+    public ItemCardController(ItemService itemService, UserService userService) {
         this.itemService = itemService;
+        this.userService = userService;
     }
 
     @GetMapping(value = "/showItemCard/{id}")
     public String showItemCard(@PathVariable(name = "id") Long id, Model model) throws Throwable{
         Item item = itemService.findItemById(id);
-        Integer rating = null;
+        Float rating = null;
 
         if(item.getComments().size()!=0) {
-            int score=0;
+            float score=0;
             for (UserComment comment: item.getComments()) {
                 score += comment.getScore();
             }
@@ -42,11 +50,13 @@ public class ItemCardController {
     }
 
     @PostMapping(value="/insertItemComment")
+    @Secured("ROLE_USER")
     public String insertItemComment (@ModelAttribute(name = "item_id") Long id,
-                                  @ModelAttribute(name = "rating") Integer score,
-                                  @ModelAttribute(name="comment") String comment) throws Throwable {
+                                     @ModelAttribute(name = "rating") Integer score,
+                                     @ModelAttribute(name="comment") String comment, Principal principal) throws Throwable {
         Item item = itemService.findItemById(id);
-        UserComment userComment = new UserComment(score, comment, item);
+        User user = userService.findByUsername(principal.getName()).orElseThrow(()->new UserNotFoundException("User not found!"));
+        UserComment userComment = new UserComment(score, comment, item, user);
         if(item.getComments() == null) {
             List<UserComment> commentList = new ArrayList<>();
             item.setComments(commentList);

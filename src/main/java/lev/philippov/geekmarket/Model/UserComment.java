@@ -13,10 +13,11 @@ import javax.persistence.*;
 @Table(name = "user_comments")
 public class UserComment {
 
-    public UserComment(Integer score, String comment, Item item) {
+    public UserComment(Integer score, String comment, Item item, User user) {
         this.score=score;
         this.comment=comment;
         this.item=item;
+        this.user=user;
     }
 
     @Id
@@ -34,4 +35,8 @@ public class UserComment {
     @ManyToOne
     @JoinColumn(name = "item_id")
     Item item;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    User user;
 }

@@ -10,30 +10,51 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div th:replace="~{navigation:: navigation(itemCard)}"/>
+    <div th:replace="~{navigation::navigation(itemCard)}"/>
     <div class="container">
-        <img style="height: 300px; width: 300px;">
-        <h1 th:text="${item.title}">Item card</h1>
-        <h2 th:text="${item.price}">Price</h2>
-        <h3 th:text="${rating}">Rating</h3>
-        <p>Reviews</p>
-        <ul th:each="comment:${comments}">
-            <li th:text="${comment.getComment()}">Comment1</li>
-        </ul>
-
-        <form method="post" th:action="@{/insertItemComment}">
-            <input type="hidden" name="item_id" th:value="${item.id}">
-            <label for="input_rating">Rating</label>
-            <select id="input_rating" class="form-control" th:name="rating" size="1" required>
-                <option th:value="1">1</option>
-                <option th:value="2">2</option>
-                <option th:value="3">3</option>
-                <option th:value="4">4</option>
-                <option th:value="5">5</option>
-            </select>
-            <textarea name="comment" placeholder="Enter your comment" class="form-control"></textarea>
-            <button class="btn btn-success" type="submit"></button>
-        </form>
+        <div class="card" style="width: 18rem;">
+            <img class="card-img-top" src="..." alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${item.title}">Card title</h5>
+                <h6 class="card-title" th:text="${item.price}">Price</h6>
+                <h6>
+                    <label for="rating_field">User rating:&nbsp</label>
+                    <span id="rating_field" th:text="${rating}">Rating</span>
+                </h6>
+            </div>
+        </div>
+        <p>User reviews</p>
+        <div style="height: 200px; overflow-y: scroll;">
+            <ul th:each="comment:${comments}" class="list-group">
+                <li class="list-group-item"><span th:text="${comment.comment}">Comment</span>&nbsp<br><small th:text="${comment.user.username}">Username</small></li>
+            </ul>
+        </div>
+        <div sec:authorize="isAuthenticated()">
+            <h2>Leave your review below!</h2>
+            <form method="post" th:action="@{/insertItemComment}">
+                <input type="hidden" name="item_id" th:value="${item.id}">
+                <div class="form-group row">
+                        <label for="input_rating" class="col-sm-2 col-form-label">Rating</label>
+                        <div class="col-sm-10">
+                            <select id="input_rating" class="form-control" th:name="rating" size="1" required>
+                                <option th:value="1">1</option>
+                                <option th:value="2">2</option>
+                                <option th:value="3">3</option>
+                                <option th:value="4">4</option>
+                                <option th:value="5">5</option>
+                            </select>
+                        </div>
+                    <label for="input_comment" class="col-sm-2 col-form-label">Comment</label>
+                    <div class="col-sm-10">
+                        <textarea id="input_comment" name="comment" placeholder="Enter your comment" class="form-control"></textarea>
+                    </div>
+                </div>
+                <button class="btn btn-success col-sm-12" type="submit">Submit</button>
+            </form>
+        </div>
+        <div sec:authorize="isAnonymous()">
+            <h2>Only authenticated users is allowed to write a review!</h2>
+        </div>
     </div>
 </body>
 </html>

@@ -3,6 +3,7 @@ package lev.philippov.geekmarket.service;
 import lev.philippov.geekmarket.Model.Order;
 import lev.philippov.geekmarket.Model.Role;
 import lev.philippov.geekmarket.Model.User;
+import lev.philippov.geekmarket.errorHandlers.UserAlreadyExistException;
 import lev.philippov.geekmarket.repository.RoleRepository;
 import lev.philippov.geekmarket.repository.UserRepository;
 import org.hibernate.NonUniqueResultException;
@@ -39,14 +40,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public Optional<User> findByUsername(String username) throws NonUniqueResultException{
+    public Optional<User> findByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
 
     @Override
     public Optional<User> findByPhone(String phone) {
         return userRepository.findByPhone(phone);
+    }
+
+    @Override
+    @Transactional
+    public boolean checkUniqueness(User user) {
+        if (findByUsername(user.getUsername()).isPresent())
+            throw new UserAlreadyExistException("User " + user.getUsername() + " already exists!");
+        if (userRepository.findByEmail(user.getEmail()).isPresent())
+            throw new UserAlreadyExistException("User with email " + user.getEmail() + " already exists!");
+        return true;
     }
 
     @Override
@@ -79,4 +89,8 @@ public class UserServiceImpl implements UserService {
         orderService.flush();
         return user;
     }
+
+
+
+
 }
