@@ -14,9 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import lev.philippov.geekmarket.utils.HistoryHelper;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
@@ -38,15 +39,16 @@ public class ShopController {
 
     @GetMapping("/shop")
     public String getAllItems(@RequestParam(name = "addId", required = false) Long addId,
-                              HttpServletRequest httpServletRequest,
-                              Model model) {
+                              HttpServletRequest request,
+                              Model model, HttpSession session) {
 
-        Map<String, Object> specAndFiltersMap = ItemSpecUtil.getSpecification(httpServletRequest.getParameterMap());
-        Pageable pageable = PaginationHelper.getPageable(httpServletRequest.getParameterMap());
+        Map<String, Object> specAndFiltersMap = ItemSpecUtil.getSpecification(request.getParameterMap());
+        Pageable pageable = PaginationHelper.getPageable(request.getParameterMap());
         String filters = (String) specAndFiltersMap.get("filters");
         Page<Item> pageItems = itemService.getPagableAndFilteredItems((Specification<Item>) specAndFiltersMap.get("specs"), pageable);
         model.addAttribute("pageItems", pageItems);
         model.addAttribute("filters", filters);
+        HistoryHelper.gatherHistoryFromCookies(request,itemService,session);
         return "shop";
     }
 

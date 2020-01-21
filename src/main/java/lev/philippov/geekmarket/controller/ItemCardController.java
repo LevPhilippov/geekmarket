@@ -7,7 +7,6 @@ import lev.philippov.geekmarket.errorHandlers.UserNotFoundException;
 import lev.philippov.geekmarket.service.ItemService;
 import lev.philippov.geekmarket.service.UserService;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,19 +33,10 @@ public class ItemCardController {
     }
 
     @GetMapping(value = "/showItemCard/{id}")
-    public String showItemCard(@PathVariable(name = "id") Long id, Model model) throws Throwable{
+    public String showItemCard(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Throwable{
         Item item = itemService.findItemById(id);
-        Float rating = null;
-
-        if(item.getComments().size()!=0) {
-            float score=0;
-            for (UserComment comment: item.getComments()) {
-                score += comment.getScore();
-            }
-            rating = score/item.getComments().size();
-        }
-
-
+        Float rating = itemService.getItemRating(item);
+        itemService.updateHistory(request,response,id,session);
         model.addAttribute(item);
         model.addAttribute("rating", rating);
         model.addAttribute("comments", item.getComments());
@@ -66,7 +60,12 @@ public class ItemCardController {
         return "redirect:/showItemCard/" + id;
     }
 
-   // TODO: оформить карточку товара, сделать возможным оставлять комментарии только зарегистрированным пользователям,
-    //  добавить к комментарию идентификатор остаивившего его.
-
+    //TODO метод не работает
+    @GetMapping(value = "/cookie/remove")
+    public String deleteAllCookies(HttpServletRequest request) {
+        for(Cookie c: request.getCookies()){
+            c.setMaxAge(0);
+        }
+        return "redirect:/shop";
+    }
 }

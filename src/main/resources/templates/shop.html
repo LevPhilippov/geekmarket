@@ -57,6 +57,8 @@
 
             <!--   Fragment Навигация-->
             <div th:replace="~{pagination :: pagination}"/>
+            <!--  Последние просмотренные товары          -->
+            <div th:replace="~{last_viewed_items_template::lastItems }">
         </div>
     </body>
 </html>

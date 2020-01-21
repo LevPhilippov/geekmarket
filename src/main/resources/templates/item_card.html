@@ -55,6 +55,7 @@
         <div sec:authorize="isAnonymous()">
             <h2>Only authenticated users is allowed to write a review!</h2>
         </div>
+        <div th:replace="~{last_viewed_items_template::lastItems }"/>
     </div>
 </body>
 </html>
