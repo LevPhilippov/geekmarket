@@ -56,12 +56,13 @@ public class ItemService {
             rating = score/item.getComments().size();
         }
         return rating;
+        //TODO попробовать вынести на уровень БД
     }
 
     public void updateHistory(HttpServletRequest request, HttpServletResponse response, Long id, HttpSession session) {
         HistoryHelper.updateHistory(request,response, id, this,session);
     }
-    
+
     public Item saveItem(Item item){
         return itemRepository.save(item);
     }
