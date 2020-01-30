@@ -72,7 +72,7 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
+            <version>18.0.0</version>
             <scope>compile</scope>
         </dependency>
 <!--        SOAP dependencies-->
@@ -83,6 +83,7 @@
         <dependency>
             <groupId>wsdl4j</groupId>
             <artifactId>wsdl4j</artifactId>
+            <version>1.6.2</version>
         </dependency>
     </dependencies>
 
@@ -118,7 +119,7 @@
 
                 <configuration>
                     <schemaDirectory>
-                        ${project.basedir}/src/main/resources/soap
+                        ${project.basedir}/src/main/resources/soap/
                     </schemaDirectory>
                     <outputDirectory>
                         ${project.basedir}/src/main/java
@@ -128,8 +129,6 @@
                     </clearOutputDir>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
 

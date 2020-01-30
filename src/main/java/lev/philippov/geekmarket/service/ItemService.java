@@ -4,6 +4,7 @@ import lev.philippov.geekmarket.Model.Item;
 import lev.philippov.geekmarket.Model.UserComment;
 import lev.philippov.geekmarket.errorHandlers.ItemNotFoundException;
 import lev.philippov.geekmarket.repository.ItemRepository;
+import lev.philippov.geekmarket.repository.UserCommentRepository;
 import lev.philippov.geekmarket.utils.HistoryHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,10 +24,12 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     private ItemRepository itemRepository;
+    private UserCommentRepository userCommentRepository;
 
     @Autowired
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, UserCommentRepository userCommentRepository) {
         this.itemRepository = itemRepository;
+        this.userCommentRepository = userCommentRepository;
     }
 
     public Page<Item> getPagableAndFilteredItems(Specification<Item> specification, Pageable pageable){
@@ -48,12 +51,13 @@ public class ItemService {
 
     public Float getItemRating(Item item) {
         Float rating = null;
-        if(item.getComments().size()!=0) {
+        List<UserComment> comments = userCommentRepository.findAllByItem_Id(item.getId());
+        if(comments != null) {
             float score=0;
-            for (UserComment comment: item.getComments()) {
+            for (UserComment comment: comments) {
                 score += comment.getScore();
             }
-            rating = score/item.getComments().size();
+            rating = score/comments.size();
         }
         return rating;
         //TODO попробовать вынести на уровень БД

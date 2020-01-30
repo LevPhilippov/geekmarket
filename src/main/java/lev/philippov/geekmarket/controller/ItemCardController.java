@@ -5,7 +5,9 @@ import lev.philippov.geekmarket.Model.User;
 import lev.philippov.geekmarket.Model.UserComment;
 import lev.philippov.geekmarket.errorHandlers.UserNotFoundException;
 import lev.philippov.geekmarket.service.ItemService;
+import lev.philippov.geekmarket.service.UserCommentService;
 import lev.philippov.geekmarket.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,17 +21,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class ItemCardController {
     ItemService itemService;
     UserService userService;
+    UserCommentService userCommentService;
 
-    public ItemCardController(ItemService itemService, UserService userService) {
+    @Autowired
+    public ItemCardController(ItemService itemService, UserService userService, UserCommentService userCommentService) {
         this.itemService = itemService;
         this.userService = userService;
+        this.userCommentService = userCommentService;
     }
 
     @GetMapping(value = "/showItemCard/{id}")
@@ -39,7 +42,7 @@ public class ItemCardController {
         itemService.updateHistory(request,response,id,session);
         model.addAttribute(item);
         model.addAttribute("rating", rating);
-        model.addAttribute("comments", item.getComments());
+        model.addAttribute("comments", userCommentService.findUserCommentsByItem_Id(item.getId()));
         return "item_card";
     }
 
@@ -51,12 +54,7 @@ public class ItemCardController {
         Item item = itemService.findItemById(id);
         User user = userService.findByUsername(principal.getName()).orElseThrow(()->new UserNotFoundException("User not found!"));
         UserComment userComment = new UserComment(score, comment, item, user);
-        if(item.getComments() == null) {
-            List<UserComment> commentList = new ArrayList<>();
-            item.setComments(commentList);
-        }
-            item.getComments().add(userComment);
-        itemService.flush();
+        userCommentService.saveComment(userComment);
         return "redirect:/showItemCard/" + id;
     }
 

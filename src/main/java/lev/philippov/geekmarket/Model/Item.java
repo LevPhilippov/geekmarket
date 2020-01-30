@@ -24,7 +24,4 @@ public class Item {
     @Column(name = "price")
     private BigDecimal price;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "item")
-    private List<UserComment> comments;
-
 }
