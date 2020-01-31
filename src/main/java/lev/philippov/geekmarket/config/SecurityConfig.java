@@ -35,6 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN", "MANAGER")
                 .antMatchers("/admin/users/**").hasRole("ADMIN")
@@ -62,5 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.setPasswordEncoder(bCryptPasswordEncoder());
         return auth;
     }
+
+
 
 }
