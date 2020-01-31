@@ -7,20 +7,18 @@ import lev.philippov.geekmarket.errorHandlers.UserNotFoundException;
 import lev.philippov.geekmarket.service.ItemService;
 import lev.philippov.geekmarket.service.UserCommentService;
 import lev.philippov.geekmarket.service.UserService;
+import lev.philippov.geekmarket.utils.CookieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class ItemCardController {
@@ -35,18 +33,18 @@ public class ItemCardController {
         this.userCommentService = userCommentService;
     }
 
-    @GetMapping(value = "/showItemCard/{id}")
-    public String showItemCard(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Throwable{
+    @GetMapping(value = "/shop/{id}")
+    public String showItemCard(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request, HttpServletResponse response) throws Throwable{
         Item item = itemService.findItemById(id);
         Float rating = itemService.getItemRating(item);
-        itemService.updateHistory(request,response,id,session);
         model.addAttribute(item);
         model.addAttribute("rating", rating);
         model.addAttribute("comments", userCommentService.findUserCommentsByItem_Id(item.getId()));
+        model.addAttribute("lastViewedItemsList", itemService.updateLastVieweditemsList(request,response,id));
         return "item_card";
     }
 
-    @PostMapping(value="/insertItemComment")
+    @PostMapping(value="/comment")
     @Secured("ROLE_USER")
     public String insertItemComment (@ModelAttribute(name = "item_id") Long id,
                                      @ModelAttribute(name = "rating") Integer score,
@@ -58,12 +56,12 @@ public class ItemCardController {
         return "redirect:/showItemCard/" + id;
     }
 
-    //TODO метод не работает
+    //TODO метод не работает (все еще не работает 31.01.20)
     @GetMapping(value = "/cookie/remove")
-    public String deleteAllCookies(HttpServletRequest request) {
-        for(Cookie c: request.getCookies()){
-            c.setMaxAge(0);
-        }
-        return "redirect:/shop";
+    @ResponseBody
+    public String deleteAllCookies(HttpServletRequest request, HttpServletResponse response) {
+        CookieHelper.removeCookies(request, response);
+//        return "redirect:/shop";
+        return "Cookie is empty";
     }
 }

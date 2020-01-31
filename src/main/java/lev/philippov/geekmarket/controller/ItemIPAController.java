@@ -22,7 +22,7 @@ public class ItemIPAController {
         this.itemService = itemService;
     }
 
-    @GetMapping("/")
+    @GetMapping({"/",""})
     public List<Item> getAllItems(){
         return itemService.findllItems();
     }
@@ -36,7 +36,7 @@ public class ItemIPAController {
         }
     }
 
-    @PostMapping("/")
+    @PostMapping({"/", ""})
     @ResponseStatus(HttpStatus.CREATED)
     public Item addItem(@RequestBody(required = false) Item item) {
         return itemService.saveItem(item);

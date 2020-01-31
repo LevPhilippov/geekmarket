@@ -5,20 +5,17 @@ import lev.philippov.geekmarket.Model.UserComment;
 import lev.philippov.geekmarket.errorHandlers.ItemNotFoundException;
 import lev.philippov.geekmarket.repository.ItemRepository;
 import lev.philippov.geekmarket.repository.UserCommentRepository;
-import lev.philippov.geekmarket.utils.HistoryHelper;
+import lev.philippov.geekmarket.utils.CookieHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Service
 public class ItemService {
@@ -63,8 +60,8 @@ public class ItemService {
         //TODO попробовать вынести на уровень БД
     }
 
-    public void updateHistory(HttpServletRequest request, HttpServletResponse response, Long id, HttpSession session) {
-        HistoryHelper.updateHistory(request,response, id, this,session);
+    public List<Item>  updateLastVieweditemsList(HttpServletRequest request, HttpServletResponse response, Long id) {
+        return CookieHelper.updateLastViewedItemsList(request,response, id, this);
     }
 
     public Item saveItem(Item item){
