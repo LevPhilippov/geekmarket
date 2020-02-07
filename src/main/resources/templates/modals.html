@@ -51,7 +51,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form th:action="@{'/oneClickPurchase'}" method="post">
+                        <form th:action="@{'/oneclick'}" method="post">
                             <div class="form-group">
                                 <label for="input-phone" class="col-form-label" th:text="#{order.phone}">Phone:</label>
                                 <input id="input-phone" type="text" class="form-control" name="phone" pattern="\++\d{11}">

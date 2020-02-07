@@ -2,10 +2,12 @@ package lev.philippov.geekmarket.service;
 
 import lev.philippov.geekmarket.Model.Item;
 import lev.philippov.geekmarket.Model.UserComment;
+import lev.philippov.geekmarket.config.RabbitMQConfig;
 import lev.philippov.geekmarket.errorHandlers.ItemNotFoundException;
 import lev.philippov.geekmarket.repository.ItemRepository;
 import lev.philippov.geekmarket.repository.UserCommentRepository;
 import lev.philippov.geekmarket.utils.CookieHelper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

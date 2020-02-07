@@ -1,9 +1,11 @@
 package lev.philippov.geekmarket.controller;
 
 import lev.philippov.geekmarket.Model.Item;
+import lev.philippov.geekmarket.config.RabbitMQConfig;
 import lev.philippov.geekmarket.errorHandlers.ItemErrorResponse;
 import lev.philippov.geekmarket.errorHandlers.ItemNotFoundException;
 import lev.philippov.geekmarket.service.ItemService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,12 @@ import java.util.List;
 public class ItemIPAController {
 
     private ItemService itemService;
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public void setItemService(ItemService itemService) {
+    public ItemIPAController(ItemService itemService, RabbitTemplate rabbitTemplate) {
         this.itemService = itemService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @GetMapping({"/",""})
@@ -70,4 +74,11 @@ public class ItemIPAController {
         itemErrorResponse.setTimestamp(System.currentTimeMillis());
         return new ResponseEntity<ItemErrorResponse>(itemErrorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping(value = "/rabbit")
+    public String sendRabbitMessage() {
+        rabbitTemplate.convertAndSend(RabbitMQConfig.TRANSMIT_EXCHANGER,RabbitMQConfig.routingKey, "1");
+        return HttpStatus.OK.getReasonPhrase();
+    }
+
 }

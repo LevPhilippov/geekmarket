@@ -66,7 +66,7 @@ public class CartController {
         return "fill_order_details";
     }
 
-    @PostMapping("/oneClickPurchase")
+    @PostMapping("/oneclick")
     public String oneClickPurchase(@RequestParam(name = "phone") String phone, Model model){
         Order order = new Order(cart);
         order.setPhone(phone);
