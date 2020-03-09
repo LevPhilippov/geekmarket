@@ -44,6 +44,8 @@
                 <th>Date</th>
                 <th>Price</th>
                 <th>Consists</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
             </thead>
             <tbody>
@@ -62,6 +64,8 @@
                         </tbody>
                     </table>
                 </td>
+                <td th:text="${order.getStatus()}"></td>
+                <td th:if="${order.getStatus().equals(order.getStatus().CONFIRMED)}"> <a th:href="@{'/buy/' + ${order.getId()}}" th:text="#{nav.pay}"></a></td>
             </tr>
             </tbody>
         </table>

@@ -24,6 +24,11 @@ public class OrderService {
     }
 
     @Transactional
+    public Order findById(Long id) {
+        return orderRepository.findById(id).get();
+    }
+
+    @Transactional
     public Order saveOrder(Order order){
         order.setStatus(OrderStatus.RECEIVED);
         Order saved = orderRepository.save(order);

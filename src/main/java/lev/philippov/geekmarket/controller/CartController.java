@@ -20,13 +20,11 @@ import java.security.Principal;
 public class CartController {
 
     private Cart cart;
-    private ItemService itemService;
     private UserService userService;
     private OrderService orderService;
 
-    public CartController(Cart cart, ItemService itemService, UserService userService, OrderService orderService) {
+    public CartController(Cart cart, UserService userService, OrderService orderService) {
         this.cart = cart;
-        this.itemService = itemService;
         this.userService = userService;
         this.orderService = orderService;
     }
@@ -59,7 +57,7 @@ public class CartController {
     }
 
     @GetMapping("/cart/save")
-    public String verifyOrderDetails(Model model,Principal principal ) {
+    public String verifyOrderDetails(Model model,Principal principal) {
         User user = userService.findByUsername(principal.getName()).orElseThrow(()-> new UserNotFoundException("User not found!"));
         Order order = new Order(user,cart);
         model.addAttribute(order);
