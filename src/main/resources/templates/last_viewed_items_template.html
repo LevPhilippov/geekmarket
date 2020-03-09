@@ -11,7 +11,7 @@
     <div th:fragment="lastItems">
         <h4>Last viewed items</h4>
         <div class="card-deck">
-            <div class="card" th:each="item:${#session.getAttribute('items')}" style="max-width: 17% ">
+            <div class="card" th:each="item:${lastViewedItemsList}" style="max-width: 17% ">
                 <img class="card-img-top" src="..." alt="Card image cap">
                 <div class="card-body">
                     <h5 class="card-title" th:text="${item.getTitle()}">Card title</h5>

@@ -1,0 +1,35 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://www.geekmarket.philippov.lev/soap/catalog"
+           targetNamespace="http://www.geekmarket.philippov.lev/soap/catalog"
+           elementFormDefault="qualified">
+
+    <xs:element name="getItemListRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="clientName" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getItemListResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="clientName" type="xs:string" />
+                <xs:element name="soapItemList" type="tns:soapItemDto" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="soapItemDto">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="price" type="xs:decimal"/>
+        </xs:sequence>
+    </xs:complexType>
+
+<!--    <xs:complexType name="SoapItemList">-->
+<!--        <xs:sequence>-->
+<!--            <xs:element name="soapItemDto" type="tns:soapItemDto" minOccurs="0" maxOccurs="unbounded"/>-->
+<!--        </xs:sequence>-->
+<!--    </xs:complexType>-->
+</xs:schema>

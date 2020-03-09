@@ -70,6 +70,7 @@ CREATE TABLE orders (
     email varchar(255),
     address text,
     comment text,
+    status varchar(30),
     CONSTRAINT fk_orders_users FOREIGN KEY (user_id) REFERENCES users (id)
 );
 

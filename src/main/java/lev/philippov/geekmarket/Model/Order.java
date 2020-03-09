@@ -9,8 +9,6 @@ import javax.validation.constraints.Email;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.function.Function;
 
 @Entity
 @Table(name = "orders")
@@ -56,6 +54,10 @@ public class Order {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "order", cascade = CascadeType.ALL)
     private Collection<CartItem> cartItems;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status")
+    private OrderStatus status;
+
     public Order (User user, Cart cart) {
         this.user = user;
         this.cartItems = new ArrayList<>();
@@ -79,7 +81,7 @@ public class Order {
             cartItems.add(i);
         }
     }
-
+    //заказы зарегистрированных пользователей
     public void prepareForSaving(User user, Cart cart){
         this.user = user;
         this.cartItems = new ArrayList<>();
@@ -89,7 +91,7 @@ public class Order {
         }
         this.totalPrice = cart.getCartPrice();
     }
-
+    //анонимные заказы
     public void prepareForSaving(Cart cart) {
         this.cartItems = new ArrayList<>();
         cartItems.addAll(cart.getCartItemsMap().values());
